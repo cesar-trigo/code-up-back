@@ -5,7 +5,7 @@ import express from "express";
 import __dirname from "./utils.js";
 import path from "path";
 import cookieParser from "cookie-parser";
-import logger from "morgan";
+/* import logger from "morgan"; */
 
 // routes
 import indexRouter from "./routes/index.js";
