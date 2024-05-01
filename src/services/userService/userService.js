@@ -1,4 +1,5 @@
 import User from "../../models/User.js";
+import Event from "../../models/Event.js";
 import bcryptjs from "bcryptjs";
 
 export const registerService = async payload => {
@@ -42,6 +43,34 @@ export const readAllService = async order => {
   try {
     const users = await User.find().sort(order);
     return users;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registerForEventService = async payload => {
+  const { userId, eventId } = payload;
+  try {
+    const idUser = await User.findById(userId);
+    const idEvent = await Event.findById(eventId);
+
+    if (idUser.age < idEvent.place.minimumAge) {
+      throw new Error("You cannot register because you do not reach the minimum age");
+    }
+
+    if (idEvent.attendees.length >= idEvent.place.capacity) {
+      throw new Error("You cannot register because the place does not have more capacity");
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $push: { events: eventId } },
+      { new: true }
+    );
+
+    await Event.findByIdAndUpdate(eventId, { $push: { attendees: userId } }, { new: true });
+
+    return user;
   } catch (error) {
     throw error;
   }

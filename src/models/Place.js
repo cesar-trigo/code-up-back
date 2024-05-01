@@ -4,7 +4,8 @@ const placeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
   photo: { type: String },
-  date: { type: Array, required: true, unique: true },
+  events: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
+  date: [{ type: Date, required: true }],
   occupancy: { type: Number, required: true },
 });
 

@@ -30,9 +30,10 @@ const contoller = {
   },
 
   readAll: async (req, res, next) => {
-    let order = { name: req.query.name };
+    const payload = req.query;
+
     try {
-      const events = await readAllService(order);
+      const events = await readAllService(payload);
       res.status(200).json({
         res: events,
         message: `${events.length} events read successfully`,
