@@ -22,8 +22,6 @@ const controller = {
   },
 
   readAll: async (req, res, next) => {
-    let order = { name: req.query.name };
-
     const payload = req.query;
 
     try {

@@ -3,6 +3,7 @@ import {
   signinService,
   readOneService,
   readAllService,
+  registerForEventService,
   updateOneService,
   destroyService,
 } from "../services/userService/userService.js";
@@ -46,6 +47,21 @@ const controller = {
       res.status(200).json({
         res: users,
         message: `${users.length} users read successfully`,
+        success: true,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  registerForEvent: async (req, res, next) => {
+    const payload = req.body;
+
+    try {
+      const userid = await registerForEventService(payload);
+      res.status(200).json({
+        res: userid,
+        message: "user registered to event successfully",
         success: true,
       });
     } catch (error) {

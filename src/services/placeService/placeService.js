@@ -1,13 +1,14 @@
 import Place from "../../models/Place.js";
 
 export const createService = async payload => {
-  const { name, address, photo, date, occupancy } = payload;
+  const { name, address, photo, events, date, occupancy } = payload;
 
   try {
     const newPlace = new Place({
       name,
       address,
       photo,
+      events,
       date,
       occupancy,
     });
