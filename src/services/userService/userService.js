@@ -41,7 +41,12 @@ export const signinService = async (user, payload) => {
 
 export const readAllService = async order => {
   try {
-    const users = await User.find().sort(order);
+    const users = await User.find()
+      .sort(order)
+      .populate({
+        path: "events",
+        populate: { path: "place" },
+      });
     return users;
   } catch (error) {
     throw error;
@@ -64,7 +69,7 @@ export const registerForEventService = async payload => {
 
     const user = await User.findByIdAndUpdate(
       userId,
-      { $push: { events: eventId } },
+      { $push: { events: idEvent._id } },
       { new: true }
     );
 
