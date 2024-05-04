@@ -3,7 +3,7 @@ const validator = schema => (req, res, next) => {
     abortEarly: false,
   });
   if (error) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       message: error.details.map(err => err.message),
     });
