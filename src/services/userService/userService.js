@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 
 export const registerService = async payload => {
   const { name, lastname, email, photo, password, age, genre, events } = payload;
+  //const { name, lastname, email, photo, password, age, genre } = payload;
   const role = "user";
   const passwordHash = await bcryptjs.hash(password, 10);
   try {
@@ -15,7 +16,7 @@ export const registerService = async payload => {
       password: passwordHash,
       age,
       genre,
-      events,
+      events: [],
       role,
     });
     await newUser.save();
