@@ -39,6 +39,29 @@ const controller = {
     }
   },
 
+  loginWithToken: async (req, res, next) => {
+    const { user } = req;
+
+    try {
+      return res.status(200).json({
+        response: {
+          id: user.id,
+          name: user.name,
+          lastname: user.lastname,
+          email: user.email,
+          photo: user.photo,
+          age: user.age,
+          events: user.events,
+          role: user.role,
+        },
+        success: true,
+        message: `Welcome ${user.name}`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   readAll: async (req, res, next) => {
     let order = { name: req.query.name };
 
@@ -99,6 +122,21 @@ const controller = {
       next(error);
     }
   },
+  /*   updatePassword: async (req, res, next) => {
+    const { id } = req.params;    	
+    const payload = req.body;	
+
+    try {
+      const userid = await User.findByIdAndUpdate(id, payload);
+      res.status(200).json({
+        res: userid,
+        message: "password updated successfully",
+        success: true,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }, */
 
   destroy: async (req, res, next) => {
     const { id } = req.params;

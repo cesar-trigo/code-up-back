@@ -1,6 +1,7 @@
 import User from "../../models/User.js";
 import Event from "../../models/Event.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const registerService = async payload => {
   const { name, lastname, email, photo, password, age, genre, events } = payload;
@@ -31,10 +32,32 @@ export const signinService = async (user, payload) => {
 
   try {
     const validPassword = await bcryptjs.compare(password, user.password);
-    if (!validPassword) {
-      throw new Error("Incorrect password or email");
+    if (validPassword) {
+      const token = jwt.sign(
+        {
+          id: user._id,
+          name: user.name,
+          lastname: user.lastname,
+          photo: user.photo,
+          age: user.age,
+          events: user.events,
+          role: user.role,
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: 60 * 60 * 24 * 365 }
+      );
+      let userToken = {
+        id: user._id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+        photo: user.photo,
+        age: user.age,
+        events: user.events,
+        role: user.role,
+      };
+      return { token, userToken };
     }
-    return user;
   } catch (error) {
     throw error;
   }
@@ -92,8 +115,18 @@ export const readOneService = async id => {
 };
 
 export const updateOneService = async (id, payload) => {
+  let userfind = await User.findById(id);
+
+  const { role, ...rest } = payload;
+
+  if (rest.password) {
+    rest.password = await bcryptjs.hash(rest.password, 10);
+  }
+
+  userfind = { ...userfind._doc, ...rest };
+
   try {
-    const user = await User.findByIdAndUpdate(id, payload, { new: true });
+    const user = await User.findByIdAndUpdate(id, userfind, { new: true });
     return user;
   } catch (error) {
     throw error;
