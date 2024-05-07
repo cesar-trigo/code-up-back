@@ -1,1 +1,2 @@
-proyecto con node, express, mongodb
+Servidor http
+node, express, mongodb
