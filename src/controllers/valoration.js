@@ -4,7 +4,7 @@ import Valoration from "../models/Valoration.js";
 const controller = {
   create: async (req, res, next) => {
     const payload = req.body;
-
+    const { user } = req;
     const event = await Event.findById(payload.eventId);
 
     if (event.date > Date.now()) {
@@ -14,17 +14,26 @@ const controller = {
       });
     }
 
-    const valoration = new Valoration({
+    const userEn = event.attendees.some(id => id.equals(user._id));
+
+    if (!userEn) {
+      return res.status(400).json({
+        message: `not user in event}`,
+        success: false,
+      });
+    }
+
+    const newValoration = new Valoration({
       valoration: payload.valoration,
-      userId: payload.userId,
+      userId: user._id,
       eventId: payload.eventId,
     });
 
     try {
-      const valorationCreated = await valoration.save();
+      const valoration = await newValoration.save();
       return res.status(201).json({
-        res: valorationCreated,
-        message: "Valoration created successfully",
+        res: valoration,
+        message: `Valoration created successfully`,
         success: true,
       });
     } catch (error) {

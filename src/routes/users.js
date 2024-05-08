@@ -14,7 +14,7 @@ router.post("/", validator(schema), register);
 router.post("/signin", accountExistsSignIn, signin);
 router.post("/token", passport.authenticate("jwt", { session: false }), loginWithToken);
 router.get("/", readAll);
-router.post("/registerForEvent", registerForEvent);
+router.post("/registerEvent", passport.authenticate("jwt", { session: false }), registerForEvent);
 router.get("/:id", readOne);
 router.delete("/:id", destroy);
 router.patch("/:id", updateOne);

@@ -77,9 +77,19 @@ export const readAllService = async payload => {
   }
 };
 
-export const updateOneService = async (id, payload) => {
+export const updateOneService = async (id, payload, user) => {
+  let eventOld = await Event.findById(id);
+
+  if (!eventOld.organizer.equals(user.id)) {
+    throw new Error("Unauthorized");
+  }
+
+  const { place, date, attendees, organizer, ...rest } = payload;
+
+  eventOld = { ...eventOld._doc, ...rest };
+
   try {
-    const event = await Event.findByIdAndUpdate(id, payload, { new: true });
+    const event = await Event.findByIdAndUpdate(id, eventOld, { new: true });
     return event;
   } catch (error) {
     throw error;

@@ -83,6 +83,10 @@ export const registerForEventService = async payload => {
     const idUser = await User.findById(userId);
     const idEvent = await Event.findById(eventId);
 
+    if (!idUser.role === "user") {
+      throw new Error("User not found");
+    }
+
     if (idUser.age < idEvent.place.minimumAge) {
       throw new Error("You cannot register because you do not reach the minimum age");
     }
