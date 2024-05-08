@@ -47,11 +47,13 @@ const contoller = {
   updateOne: async (req, res, next) => {
     const payload = req.body;
     const { id } = req.params;
+    const { user } = req;
+
     try {
-      const event = await updateOneService(id, payload);
+      const event = await updateOneService(id, payload, user);
       res.status(201).json({
         res: event,
-        message: "event updated successfully",
+        message: `event updated successfully ${user.name}`,
         success: true,
       });
     } catch (error) {

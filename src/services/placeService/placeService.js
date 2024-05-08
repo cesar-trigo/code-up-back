@@ -1,9 +1,13 @@
 import Place from "../../models/Place.js";
 
-export const createService = async payload => {
+export const createService = async (payload, user) => {
   const { name, address, photo, events, date, occupancy } = payload;
 
   try {
+    if (user.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
     const newPlace = new Place({
       name,
       address,

@@ -9,8 +9,10 @@ import {
 const controller = {
   create: async (req, res, next) => {
     const payload = req.body;
+    const { user } = req;
+
     try {
-      const place = await createService(payload);
+      const place = await createService(payload, user);
       res.status(201).json({
         res: place,
         message: "place created successfully",
